@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>My Favorite Anime App</title>
+<link rel="icon"
+      type="image/png"
+      href="https://i.pinimg.com/736x/11/31/66/113166e1b1738a56061101e7dce2a822.jpg">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+
+/* ===== BODY ===== */
+body{
+  background:
+    radial-gradient(circle at 10% -10%, #38bdf8 0%, transparent 40%),
+    radial-gradient(circle at 90% 0%, #a78bfa 0%, transparent 40%),
+    #020617;
+
+  display:flex;
+  justify-content:center;
+  min-height:100vh;
+  color:white;
+}
+/* Header row */
+.header-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+/* ===== PREMIUM COUNTER BADGE ===== */
+.anime-count{
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  padding:7px 14px;
+  border-radius:999px;
+
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.12);
+
+  backdrop-filter:blur(16px);
+
+  box-shadow:
+    0 0 10px rgba(255,110,199,.25),
+    inset 0 0 10px rgba(255,255,255,.05);
+
+  animation:badgeGlow 4s ease-in-out infinite;
+}
+
+/* Neon breathing glow */
+@keyframes badgeGlow{
+  0%,100%{
+    box-shadow:
+      0 0 10px rgba(255,110,199,.25),
+      0 0 18px rgba(192,132,252,.2);
+  }
+  50%{
+    box-shadow:
+      0 0 18px rgba(255,110,199,.5),
+      0 0 30px rgba(192,132,252,.35);
+  }
+}
+
+/* Gradient count text */
+.count-text{
+  font-size:.78rem;
+  font-weight:600;
+
+  background:linear-gradient(90deg,#ff9de6,#c084fc,#38bdf8);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* Live indicator dot */
+.dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+
+  background:#ff6ec7;
+
+  box-shadow:
+    0 0 6px #ff6ec7,
+    0 0 12px #ff6ec7;
+
+  animation:dotPulse 2s ease-in-out infinite;
+}
+
+@keyframes dotPulse{
+  0%,100%{ transform:scale(1); opacity:.9; }
+  50%{ transform:scale(1.4); opacity:1; }
+}
+
+
+/* ===== APP ===== */
+.app{
+  width:100%;
+  max-width:420px;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:linear-gradient(180deg,rgba(15,23,42,.92),rgba(2,6,23,1));
+}
+
+/* ===== HEADER ===== */
+.header{
+  padding:22px 20px 16px;
+  background:rgba(0,0,0,.45);
+  backdrop-filter:blur(22px);
+}
+
+.title{
+  font-size:1.5rem;
+  font-weight:700;
+  background:linear-gradient(90deg,#f472b6,#38bdf8,#a78bfa);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* ===== SEARCH ===== */
+.search{
+  margin-top:16px;
+  background:rgba(255,255,255,.06);
+  padding:12px 15px;
+  border-radius:18px;
+}
+
+.search input{
+  background:transparent;
+  border:none;
+  outline:none;
+  color:white;
+  width:100%;
+}
+
+/* ===== GRID ===== */
+.content{
+  flex:1;
+  overflow-y:auto;
+  padding:18px 16px 40px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;
+}
+
+/* ===== CARD ===== */
+.card{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  cursor:pointer;
+}
+
+/* ===== THIN FLOWING NEON BORDER ===== */
+.poster{
+  border-radius:26px;
+  padding:1px;
+
+  background:linear-gradient(
+    120deg,
+    #ff6ec7,
+    #ff9de6,
+    #ffc1f0,
+    #ff6ec7
+  );
+
+  background-size:300% 300%;
+  animation:borderFlow 8s linear infinite;
+
+  box-shadow:
+    0 0 4px #ff6ec7,
+    0 0 10px rgba(255,110,199,.4);
+}
+
+@keyframes borderFlow{
+  0%{ background-position:0% 50%; }
+  100%{ background-position:100% 50%; }
+}
+
+/* ===== IMAGE ===== */
+.poster-inner{
+  border-radius:25px;
+  overflow:hidden;
+  aspect-ratio:2/3;
+  height:260px;
+}
+
+.poster-inner img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* ===== TITLE ===== */
+.card-title{
+  font-size:1rem;
+  font-weight:600;
+  text-align:center;
+}
+
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<!-- HEADER -->
+<div class="header">
+
+  <div class="header-top">
+
+    <div class="title">🌸 My Anime App</div>
+
+    <div class="anime-count" id="animeCount">
+      <span class="dot"></span>
+      <span class="count-text">0 Anime</span>
+    </div>
+
+  </div>
+
+  <div class="search">
+    <input id="searchInput" placeholder="Search anime..."/>
+  </div>
+
+</div>
+
+
+<!-- CONTENT -->
+<div class="content" id="content">
+
+<!-- The Dangers in My Heart -->
+<div class="card"
+data-title="The Dangers in My Heart"
+data-link="https://animepahe.si/anime/d0784446-5683-4d3c-1415-0ce1c8e7d678">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/ec72e6248df26cca27f5b0e22744b9a1cdb62e4ea2045709ec4539335983a8b9.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">The Dangers in My Heart</div>
+</div>
+<!-- My Dress-Up Darling -->
+<div class="card"
+data-title="My Dress-Up Darling"
+data-link="https://animepahe.si/anime/4eb41043-07d4-6c84-353e-d831a1efced5">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/d429bfbe1df77685c3ebd95b93ddc4bac31d1518d932689f1f868ce88d5a9191.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">My Dress-Up Darling</div>
+</div>
+
+<!-- Fragrant Flower -->
+<div class="card"
+data-title="The Fragrant Flower Blooms with Dignity"
+data-link="https://animepahe.si/anime/27a95751-0311-47ed-dbce-7f0680d5074a">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/7103371364ff1310373c89cf444ffc3e6de0b757694a0936ae80e65cfae400b5.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Fragrant Flower</div>
+</div>
+
+<!-- Kaguya-sama -->
+<div class="card"
+data-title="Kaguya-sama Love is War"
+data-link="https://animepahe.si/anime/dfca0d73-a825-991f-898e-26bf6f6c20e0">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/269a67053511626cefaeba68a1e01a200b53d36456ac3b328b5bb5a6642b6e62.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Kaguya-sama</div>
+</div>
+
+<!-- Komi -->
+<div class="card"
+data-title="Komi Can't Communicate"
+data-link="https://animepahe.si/anime/153f8e0f-638e-b4c4-4910-b06bbe112adc">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/4cc90306ce53d4b01275b174a7d669a9cde14fcd1d168d9caa0bbaf33251750c.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Komi</div>
+</div>
+
+<!-- Horimiya -->
+<div class="card"
+data-title="Horimiya"
+data-link="https://animepahe.si/anime/e779f292-c9e1-747c-620d-a711c83329eb">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/5bd8fd820668b5f91bf835e790e9f3036af3af11bc71d6e4b3d95e51d68b194c.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Horimiya</div>
+</div>
+
+<!-- More than a Married Couple but Not Lovers -->
+<div class="card"
+data-title="More than a Married Couple but Not Lovers"
+data-link="https://animepahe.si/anime/401be849-13fb-b047-1e2d-e026d00f5c35">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/dce493dd1be70634dfb6f6901002835ffd0797bd9bc145f6decc41d95b82c021.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Married Couple</div>
+</div>
+
+<!-- Quintessential Quintuplets -->
+<div class="card"
+data-title="The Quintessential Quintuplets"
+data-link="https://animepahe.si/anime/e6e03d2f-2027-6840-9394-73e0d6251e1b">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/3951740b39b89596bed8ce00e0b680e2747d1e1527ee8be83343affe2c7f8646.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Quintuplets</div>
+</div>
+
+<!-- Oregairu -->
+<div class="card"
+data-title="My Teen Romantic Comedy SNAFU"
+data-link="https://animepahe.si/anime/fca7d9a3-0a90-f98b-29b8-ee1f7dfeb981">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/acb9591fa98bcd6775e1dca283ea0327f685cb2fd54bd8f441cc8c3dfbf0d97b.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Oregairu</div>
+</div>
+<!-- Kubo Won't Let Me Be Invisible -->
+<div class="card"
+data-title="Kubo Won't Let Me Be Invisible"
+data-link="https://animepahe.si/anime/d442bc03-e813-6573-30b5-440914dd5d9e">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/10cd1a3a188dfbad8bd269c8bc888ef03e833d203892ff15105cde5d801ec5b7.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Kubo Won't Let Me Be Invisible</div>
+</div>
+
+
+<!-- Bunny Girl Senpai -->
+<div class="card"
+data-title="Rascal Does Not Dream of Bunny Girl Senpai"
+data-link="https://animepahe.si/anime/509bd719-d1f3-be46-2893-d8884506889a">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/1cf6fb2d8f0bd5e4674a9ffdf08ae531d7d826e0cf2c615b1e01b09cdcc02ef0.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Bunny Girl Senpai</div>
+</div>
+
+
+<!-- Angel Next Door -->
+<div class="card"
+data-title="The Angel Next Door Spoils Me Rotten"
+data-link="https://animepahe.si/anime/f6b563dc-d44b-e7fb-92d3-cb806b330309">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/9d76ff87dc6ca8867b1c30543df87674f4b947850f35894b7a35284e5d1190f9.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Angel Next Door</div>
+</div>
+
+<!-- Hokkaido Gals -->
+<div class="card"
+data-title="Hokkaido Gals Are Super Adorable!"
+data-link="https://animepahe.si/anime/1680c5fd-b49f-ac48-ee2a-caa173de1690">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/db52980e9ab60974560546026208d94359fd962b5f5ccdea4dd44eb9d1d7b3a3.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Hokkaido Gals</div>
+</div>
+
+<!-- A Sign of Affection -->
+<div class="card"
+data-title="A Sign of Affection"
+data-link="https://animepahe.si/anime/770c6aca-2b28-4b3e-9a54-2331908a03d9">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/e6e96cc6f7a5437370d4b8f3047d38eb54d51d08314dbf8d827316313bbb53e0.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">A Sign of Affection</div>
+</div>
+
+<!-- Alya -->
+<div class="card"
+data-title="Alya Sometimes Hides Her Feelings in Russian"
+data-link="https://animepahe.si/anime/792f7df3-b74d-f848-3244-a4e9b6495d8f">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/7bdd2434960d6e3b525df07340b6c65447f1402088282ca06ef2534cdca14b7d.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Alya</div>
+</div>
+
+<!-- Rent-a-Girlfriend -->
+<div class="card"
+data-title="Rent-a-Girlfriend"
+data-link="https://animepahe.si/anime/8c026176-371b-9357-5d42-03785364dc96">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/87a78bdefdaa7fe3d7de15d893abcf24eabe13c5cace0220c5c974300fc7093c.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Rent-a-Girlfriend</div>
+</div>
+<!-- Shikimori -->
+<div class="card"
+data-title="Shikimori's Not Just a Cutie"
+data-link="https://animepahe.si/anime/a2929abf-659b-bb8d-83b9-34a465875f60">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/ad4fe13e6479ee83f1d9775c9a592f43edf99b4bc23bdda4bc2eb63d51de753e.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Shikimori</div>
+</div>
+
+<!-- Tomo-chan -->
+<div class="card"
+data-title="Tomo-chan Is a Girl!"
+data-link="https://animepahe.si/anime/15774f8d-341c-96b7-1d13-35da6d7af512">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/9a711d636671abf8d3bb10212725658f436ece298d2a1f02a504f33112c236b7.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Tomo-chan Is a Girl!</div>
+</div>
+
+<!-- A Couple of Cuckoos -->
+<div class="card"
+data-title="A Couple of Cuckoos"
+data-link="https://animepahe.si/anime/d3c1b359-c14a-5053-d47d-7e46e9b01fca">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/c98a7574b8de582fe9b7fcd4f3dc08261677520cd9b0e19f3a96dacc33952fd2.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Cuckoos</div>
+</div>
+
+<!-- Medaka Kuroiwa -->
+<div class="card"
+data-title="Medaka Kuroiwa is Impervious to My Charms"
+data-link="https://animepahe.si/anime/a717dbed-5557-4c05-f52a-3dc3e94d421c">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/ba08614298806d29918dc5a84baa13a70702cacc235e24a380a7b8a0c750ef59.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Medaka Kuroiwa</div>
+</div>
+
+<!-- 100 Girlfriends -->
+<div class="card"
+data-title="The 100 Girlfriends"
+data-link="https://animepahe.si/anime/50c19289-7188-98dd-eda4-a73ebc48f5ef">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/9b99517b73cf3206ecd80b98f05c1d5882ef7470646405624fdd397c10048377.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">100 Girlfriends</div>
+</div>
+<!-- Yamada-kun Lv999 -->
+<div class="card"
+data-title="My Love Story with Yamada-kun at Lv999"
+data-link="https://animepahe.si/anime/5b3276ed-78f8-4736-0ebb-e1ad07106c9f">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/0bbc686496f5478ce57a59c603d1d25e7f98ca5887663eb012144e47b36d25b3.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Yamada-kun Lv999</div>
+</div>
+
+<!-- Girlfriend, Girlfriend -->
+<div class="card"
+data-title="Girlfriend, Girlfriend"
+data-link="https://animepahe.si/anime/23dd4bf3-12af-0c88-f337-36a794d0d233">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/012a972b9dad53bd970edef7969b7d3d228da5511c76dfc885c9046e25986490.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Girlfriend, Girlfriend</div>
+</div>
+
+<!-- Darling in the Franxx -->
+<div class="card"
+data-title="DARLING in the FRANXX"
+data-link="https://animepahe.si/anime/7b2d3a29-e970-90ae-40fe-5045aebc14e5">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/35a9005ace27ded6041493bb7804f1c2c26e9e1022c044688b137268d200719e.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">DARLING in the FRANXX</div>
+</div>
+
+<!-- Hyouka -->
+<div class="card"
+data-title="Hyouka"
+data-link="https://animepahe.si/anime/61555425-8293-9cee-dcce-cdd3b14d2b26">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/aeede20654a2c82e48280f2e8b2833bde5621ecd7b59dff72be3ab27eafbff0e.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Hyouka</div>
+</div>
+
+<!-- Masamune-kun -->
+<div class="card"
+data-title="Masamune-kun's Revenge"
+data-link="https://animepahe.si/anime/8b29cc94-41b5-5d25-621b-0e9c6d8d3987">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/f4505ed805865f40c55dd2e368ee301ded0607b68b6cd4f86575233b6f16ba09.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Masamune-kun's Revenge</div>
+</div>
+
+
+<!-- Plastic Memories -->
+<div class="card"
+data-title="Plastic Memories"
+data-link="https://animepahe.si/anime/b6410321-8f75-d4b6-0315-928a398ee6e7">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/231b518aa06838cebc71e17c5d63b020c2e22a9552165e753f5a0e84161be8ef.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Plastic Memories</div>
+</div>
+
+<!-- Tying the Knot with an Amagami Sister -->
+<div class="card"
+data-title="Tying the Knot with an Amagami Sister"
+data-link="https://animepahe.si/anime/0e484cac-a03e-f30b-fc9c-734f3b7e63e6">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/9fce500ba64ba22dce471c43ba0fd147608a0b4d93def6fc04464158e7f9c774.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Amagami Sister</div>
+</div>
+
+<!-- Charlotte -->
+<div class="card"
+data-title="Charlotte"
+data-link="https://animepahe.si/anime/165302dd-f4ea-eab6-a355-f21296455745">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/b9f759e47e8f4e6016913ede100452c00cd94d7fd145a08505ce1ac757ed4d8f.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Charlotte</div>
+</div>
+
+<!-- Classroom of the Elite -->
+<div class="card"
+data-title="Classroom of the Elite"
+data-link="https://animepahe.si/anime/d04fee24-31de-c8f6-9e18-a7d498e1f0e1">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/935d3af342283deca3325a5dc494169918eea63bed767ad7e15f02df7630813e.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Classroom of the Elite</div>
+</div>
+
+<!-- Higehiro -->
+<div class="card"
+data-title="Higehiro"
+data-link="https://animepahe.si/anime/8a516a19-5d37-f62e-2818-a3393e049883">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/596d540b02c02fb09824d8288ed7fc4e9ee1982fb7c95dd560a93cd6bbb3736a.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Higehiro</div>
+</div>
+
+<!-- Girl Online -->
+<div class="card"
+data-title="And you thought there is never a girl online?"
+data-link="https://animepahe.si/anime/d62f806d-0c5a-3f83-b107-3ac5b8f040f4">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/95093423dfc35e9ee9d86e5c6247bdb618b8afc213d73ed1341025cd9c8a3716.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Girl Online?</div>
+</div>
+
+<!-- Spy x Family -->
+<div class="card"
+data-title="Spy x Family"
+data-link="https://animepahe.si/anime/ae719b6d-ab9f-c6e9-d3a7-8092db13afe0">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/7059de685d7c2b2fe757cd450196f4b0e2b29d53cb5d4932740680142f02adf1.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Spy x Family</div>
+</div>
+
+<!-- Married to Girl I Hate -->
+<div class="card"
+data-title="I'm Getting Married to a Girl I Hate in My Class"
+data-link="https://animepahe.si/anime/5a1ab939-60e6-f3d6-ca8d-88824743fe54">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/ea2f5a3dc30bf76c7bafe83d2cbbd043caf39eb75a21736c962673c86e684a63.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Married to Girl I Hate</div>
+</div>
+
+<!-- One Punch Man -->
+<div class="card"
+data-title="One Punch Man"
+data-link="https://animepahe.si/anime/1d46b7b2-8b7f-00d2-72c2-dc98ee9bd3e4">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/069a9d5cb397639b46f9671ac9c6ffebc78cc662a86f72d35cace30596ef37f5.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">One Punch Man</div>
+</div>
+
+<!-- Domestic Girlfriend -->
+<div class="card"
+data-title="Domestic Girlfriend"
+data-link="https://animepahe.si/anime/3f7d07af-b8bb-bf69-fc76-42dde9b7d6e6">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/754c02e9459cd6d3fed7b419e44d5b7ee820eb3e77b9fffa7657fbdb714c5561.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Domestic Girlfriend</div>
+</div>
+
+
+<!-- Kiss x Sis -->
+<div class="card"
+data-title="Kiss x Sis"
+data-link="https://animepahe.si/anime/7d187612-807f-dad2-8eea-964dea5eb9c5">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/fe89f3d0ef02984f4b8ba0b833496c4b82d96d8d6fd8803b01e1e4f002a0b98d.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Kiss x Sis</div>
+</div>
+
+<!-- High School DxD -->
+<div class="card"
+data-title="High School DxD"
+data-link="https://animepahe.si/anime/767b6da5-7e32-28a6-74dc-2155a686ced8">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/4aa2719f99b7c79b829c0650eaea8a3d354bb873dfe670590dc6c49f1b43316a.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">High School DxD</div>
+</div>
+
+<!-- Maoyu -->
+<div class="card"
+data-title="Maoyu"
+data-link="https://animepahe.si/anime/4e68c6d3-e1e6-c100-92fe-2d1851b7babb">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/3070b4aa6ee5436931b101677a73c87d4e55c65b6beaac3ddc9598c8e41049cb.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Maoyu</div>
+</div>
+
+
+
+<!-- Chainsaw Man -->
+<div class="card"
+data-title="Chainsaw Man"
+data-link="https://animepahe.si/anime/12578991-6fd4-0e6c-6a2b-0f19ce73901e">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/be74b96dcf94904b59997b494d7b755d898062350ff65723c15f92aab44f66d5.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Chainsaw Man</div>
+</div>
+
+<!-- Frieren -->
+<div class="card"
+data-title="Frieren Beyond Journey's End"
+data-link="https://animepahe.si/anime/8d9c277c-d8eb-f789-6158-b853a7236f14">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/681e1cf9c31d8dc1be16c7b8d41bbfed717acd984fbdf0626018a41ace71bf4c.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Frieren</div>
+</div>
+
+<!-- Immortal King -->
+<div class="card"
+data-title="The Daily Life of the Immortal King"
+data-link="https://animepahe.si/anime/8c26895f-78f8-89c1-f28f-28606ed108ea">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/96af9bbadfb81d2ef344c7720181c19c6be03ce668d96b86820b50b6aaa76510.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Immortal King</div>
+</div>
+
+<!-- Summer Time Rendering -->
+<div class="card"
+data-title="Summer Time Rendering"
+data-link="https://animepahe.si/anime/13c5b375-37a6-d634-bfd6-5d5e43495c80">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/8d45fb1e703909bb9556e99a15be825e307ed3b436fdb91a081ca12793503408.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Summer Time Rendering</div>
+</div>
+
+
+<!-- Eminence in Shadow -->
+<div class="card"
+data-title="The Eminence in Shadow"
+data-link="https://animepahe.si/anime/06456ecd-91a5-6a54-16f4-9f7a9bf8d9c1">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/364c5240aa5289760304465016728593251229761e5b97c9abfe9b503070287a.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Eminence in Shadow</div>
+</div>
+
+<!-- Mashle -->
+<div class="card"
+data-title="Mashle Magic and Muscles"
+data-link="https://animepahe.si/anime/651e72ad-416a-55af-8423-0100a4efae8b">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/75c62a37d28b855bb2073d0d94637b7116123953de04e9a6439be4275b116da7.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Mashle</div>
+</div>
+
+<!-- Pseudo Harem -->
+<div class="card"
+data-title="Pseudo Harem"
+data-link="https://animepahe.si/anime/810f2f74-99f6-cc0e-e61b-f3451da758e8">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/de52fa5018f2940d10d3c05fa993376a49318ff14d1f69911a101433a9f374a6.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Pseudo Harem</div>
+</div>
+
+<!-- Konosuba -->
+<div class="card"
+data-title="KonoSuba"
+data-link="https://animepahe.si/anime/a7a0437f-2ed7-47a8-578c-306361799717">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/048e45b7b7c855665469795aebf911d6e9d3a23a87b028b53e4566d4d9e370cb.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">KonoSuba</div>
+</div>
+<!-- The Girl Downstairs -->
+<div class="card"
+data-title="The Girl Downstairs"
+data-link="https://www.imdb.com/title/tt28216375/">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYITq-BZ6tMiNZnwVNoJvwp8R8oVEnPw-3Ww&s"/>
+    </div>
+  </div>
+  <div class="card-title">The Girl Downstairs</div>
+</div>
+
+<!-- Li'l Miss Vampire -->
+<div class="card"
+data-title="Lil Miss Vampire Cant Suck Right"
+data-link="https://animepahe.si/anime/c641f60e-4c6c-aa1d-a1a7-ce40bf7fc2df">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/65e2f004ee36bedf3e85fd79dc4bfb6d0d8e96dbeca1d104550b97dfd2651358.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Lil Miss Vampire</div>
+</div>
+
+<!-- Prison School -->
+<div class="card"
+data-title="Prison School"
+data-link="https://animepahe.si/anime/258a3dfc-b63f-0eb6-99e5-1e68a76719d7">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/e9873a046d3855f461dd47ab72727f11eda2174c75e444477482ddf526e4db62.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Prison School</div>
+</div>
+
+
+<!-- Redo of Healer -->
+<div class="card"
+data-title="Redo of Healer"
+data-link="https://animepahe.si/anime/36be0a87-9194-dfed-6faf-b34cf0f21eac">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/2a11f04a1a37c9e6dc2fd998564edfcb460324c9eed526df57d244e20a9f3ae8.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Redo of Healer</div>
+</div>
+
+<!-- Mushoku Tensei -->
+<div class="card"
+data-title="Mushoku Tensei Jobless Reincarnation"
+data-link="https://animepahe.si/anime/0ac0bc22-4e68-0b4c-b57c-b903fba07274">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/3f5ddf2a3404b16567cf3e03df388edb2a8ed2cc4596df31ed4cbc6b01253bd5.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Mushoku Tensei</div>
+</div>
+
+<!-- Vermeil in Gold -->
+<div class="card"
+data-title="Vermeil in Gold"
+data-link="https://animepahe.si/anime/7e2b7034-f21c-958c-edcb-a804f48bd1d3">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/03dfcab6a50c819a6820ba822092abd2b326202cfd81c4569c64418a585ba472.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Vermeil in Gold</div>
+</div>
+
+<!-- Harem Labyrinth -->
+<div class="card"
+data-title="Harem in the Labyrinth of Another World"
+data-link="https://animepahe.si/anime/c63c2e87-17a7-0de0-96eb-64984eb5843d">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/96aaeaca6033ed799d00fd89d14d5a8c80a4c7e7d58e72f3ab3a800541e077d4.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Harem Labyrinth</div>
+</div>
+
+<!-- World's End Harem -->
+<div class="card"
+data-title="Worlds End Harem"
+data-link="https://animepahe.si/anime/bd2afbba-cc6e-4edf-1e25-8be97ab2038f">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/463261179baf8669a6eee3c6f3f8d43cafb7d31cc7b36e9657d91c0a3142f0a3.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">World's End Harem</div>
+</div>
+
+<!-- Cheat Skill -->
+<div class="card"
+data-title="I Got a Cheat Skill"
+data-link="https://animepahe.si/anime/fdf5797f-2a7f-c1bd-34d9-a2d3b1b2a680">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/3b4bfb0b233b681128decf19a6ee960d6d12091027395eefa2c8e412e4e64090.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Cheat Skill</div>
+</div>
+
+<!-- Evil Lord -->
+<div class="card"
+data-title="Im the Evil Lord of an Intergalactic Empire"
+data-link="https://animepahe.si/anime/83837af5-73ae-503d-4362-f5389e634697">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/85990308d187864de333f30d12d4a4c1fca8fa72fbe896ca0ae7dea7be2f040c.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Evil Lord</div>
+</div>
+
+<!-- Finest Assassin -->
+<div class="card"
+data-title="The Worlds Finest Assassin Gets Reincarnated"
+data-link="https://animepahe.si/anime/0870af14-ee91-da94-1593-1d5c8e4ff014">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/cb8615e661994074a9c9c3944c1da56f27aedd5f3c0520274577136b503a089a.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Finest Assassin</div>
+</div>
+
+<!-- Ah My Goddess -->
+<div class="card"
+data-title="Ah My Goddess"
+data-link="https://animepahe.si/anime/b5d151d6-deee-ccf7-4678-7e04ef844b68">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/9c34cc8aee55c02dd6f9ba798f20e30c39101d874b831953c0e26f954ff9802c.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Ah My Goddess</div>
+</div>
+
+<!-- Nukitashi the Animation -->
+<div class="card"
+data-title="Nukitashi the Animation"
+data-link="https://animepahe.si/anime/b8ba421a-aff5-b103-fb10-03a9dc876fb8">
+  <div class="poster">
+    <div class="poster-inner">
+      <img src="https://i.animepahe.si/posters/c16fdd4725fe593da3e71344dd076552cfa5f77b2076ee51de4cd26714866bd5.jpg"/>
+    </div>
+  </div>
+  <div class="card-title">Nukitashi the Animation</div>
+</div>
+
+
+
+
+</div>
+
+
+
+</div>
+</div>
+
+<script>
+
+/* SEARCH */
+const input = document.getElementById("searchInput");
+const cards = document.querySelectorAll(".card");
+
+input.addEventListener("input", () => {
+  const value = input.value.toLowerCase();
+
+  cards.forEach(card => {
+    const title = card.dataset.title.toLowerCase();
+    card.style.display = title.includes(value) ? "" : "none";
+  });
+});
+
+/* ===== TOTAL ANIME COUNT ===== */
+
+const totalAnime = document.querySelectorAll(".card").length;
+
+document.getElementById("animeCount").innerText =
+  totalAnime + " Anime";
+
+
+/* CLICK → OPEN IN SAME TAB GROUP */
+document.querySelectorAll(".card").forEach(card => {
+  card.addEventListener("click", () => {
+    const link = card.dataset.link;
+
+    /* Opens in reusable tab */
+    window.open(link, "animeTab");
+  });
+});
+
+</script>
+
+
+</body>
+</html>
